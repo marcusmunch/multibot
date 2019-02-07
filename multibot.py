@@ -66,7 +66,7 @@ def get_subreddit_string(subreddit):
 def multireddit_string(subreddit_list):
     fullstring = ""
     preface = "This multireddit contains {} subs:\n\n".format(len(subreddit_list))
-    end = "\nBleep bloop, I'm a bot!"
+    end = "\nBleep bloop, I'm a bot and under development!"
 
     fullstring += preface
 
@@ -74,9 +74,9 @@ def multireddit_string(subreddit_list):
         description, over18 = get_subreddit_string(i)
 
         if over18:
-            substring = "/r/{} (NSFW) - {}".format(i.display_name, description)
+            substring = "- /r/{} (NSFW) - {}".format(i.display_name, description)
         else:
-            substring = "/r/{} - {}".format(i.display_name, description)
+            substring = "- /r/{} - {}".format(i.display_name, description)
         fullstring += substring + "\n"
 
     fullstring += end
