@@ -66,9 +66,9 @@ def get_subreddit_string(subreddit):
     return strings[subreddit.display_name]
 
 
-def multireddit_string(subreddit_list):
+def multireddit_string(subreddit_list, subreddit_name):
     fullstring = ""
-    preface = "This multireddit contains {} subs:\n\n".format(len(subreddit_list))
+    preface = "The multireddit \"{}\" contains {} subs:\n\n".format(subreddit_name, len(subreddit_list))
     end = "\nBleep bloop, I'm a bot and under development!"
 
     fullstring += preface
