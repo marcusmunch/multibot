@@ -39,7 +39,8 @@ def get_multisub_subreddits(reddit, multisub_tuple):
     try:
         return reddit.multireddit(multisub_tuple[0], multisub_tuple[1]).subreddits
     except prawcore.exceptions.NotFound:
-        sys.stderr.write("MultiReddit {0} not found!\n".format(multisub_tuple))
+        if VERBOSITY > 0:
+            sys.stderr.write("MultiReddit {0} not found!\n".format(multisub_tuple))
         raise
 
 
