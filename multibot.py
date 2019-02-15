@@ -84,6 +84,6 @@ def multireddit_string(subreddit_list, subreddit_name):
 
     fullstring += end
 
-    if VERBOSITY >= 1:
+    if VERBOSITY > 1:
         print(fullstring)
     return fullstring
