@@ -6,6 +6,8 @@ import praw
 import prawcore
 
 
+VERSION = "0.1"
+
 SUBSTRINGS_PATH = "substrings.txt"
 VERBOSITY = 0
 
@@ -18,8 +20,8 @@ except FileNotFoundError:
         f.write("{}")
 
 
-def authenticate(username="mhb"):
-    reddit = praw.Reddit(username)
+def authenticate(username):
+    reddit = praw.Reddit(username, user_agent="python:multihubbot:v{}".format(VERSION))
     username = reddit.user.me()
 
     print("Authenticated as {}!".format(username))
