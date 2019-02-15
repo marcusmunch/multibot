@@ -1,4 +1,4 @@
-# MultiBot
+# MultiBot ![](https://img.shields.io/github/release/marcusmunch/multibot.svg)
 
 `multibot` is a Reddit bot that interacts with [/r/MultiHub](https://reddit.com/r/multihub) in various ways (currently only one though).
 
