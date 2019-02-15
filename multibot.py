@@ -30,11 +30,7 @@ def authenticate(username):
 
 def get_multisub_tuple(reddit_url):
     sublink_pattern = "[A-Za-z0-9\-\_]*\/m\/[A-Za-z0-9\-\_]*"
-    try:
-        sublink = re.search(sublink_pattern, reddit_url).group(0)
-        return sublink.split("/m/")
-    except AttributeError:  # Re.search returns no groups
-        raise
+    return re.search(sublink_pattern, reddit_url).group(0).split("/m/")
 
 
 def get_multisub_subreddits(reddit, multisub_tuple):
