@@ -29,6 +29,13 @@ def authenticate(username):
 
 
 def get_multisub_tuple(reddit_url):
+    """Parses a reddit_url into a (user, multireddit) tuple to return.
+
+    Note: Raises an AttributeError if URL doesn't fit the format given by sublink_pattern
+
+    :param str reddit_url: The URL for a multireddit.
+    """
+
     sublink_pattern = "[A-Za-z0-9\-\_]*\/m\/[A-Za-z0-9\-\_]*"
     return re.search(sublink_pattern, reddit_url).group(0).split("/m/")
 
@@ -43,6 +50,14 @@ def get_multisub_subreddits(reddit, multisub_tuple):
 
 
 def get_subreddit_string(subreddit):
+    """Get the title string for a subreddit from substrings.txt rather than requesting it from the API for every post.
+    This increases the speed of the bot (which can be useful when it gathers enough karma to comment freely).
+
+    Returns a tuple consisting of the title and True/False for NSFW status.
+
+    :param str subreddit: Name of the subreddit to get the title (and NSFW status) from.
+    """
+
     with open("substrings.txt") as f:
         strings = json.load(f)
     if not subreddit.display_name in strings:  # Not yet discovered
