@@ -75,11 +75,13 @@ def get_subreddit_string(subreddit):
                 json.dump(strings, f, indent=2, sort_keys=True)
 
         except prawcore.exceptions.Forbidden:  # Subreddit is private
+            sys.stderr.write("/r/{} is private\n".format(subreddit.display_name))
             strings.update({subreddit.display_name: ("Private", False)})
             with open("substrings.txt", "w") as f:
                 json.dump(strings, f, indent=2, sort_keys=True)
 
         except prawcore.exceptions.NotFound:  # Subreddit is banned
+            sys.stderr.write("/r/{} is banned\n".format(subreddit.display_name))
             strings.update({subreddit.display_name: ("BANNED", False)})
             with open("substrings.txt", "w") as f:
                 json.dump(strings, f, indent=2, sort_keys=True)
@@ -98,7 +100,6 @@ def multireddit_string(subreddit_list, subreddit_name):
         description, over18 = get_subreddit_string(i)
 
         if description == "BANNED":
-            print("{} is banned!".format(i.display_name))
             continue
 
         if over18:
