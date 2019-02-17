@@ -86,10 +86,10 @@ def get_subreddit_string(subreddit):
 
 def multireddit_string(subreddit_list, subreddit_name):
     fullstring = ""
-    preface = "The multireddit \"{}\" contains {} subs:\n\n".format(subreddit_name, len(subreddit_list))
-    end = "\nBleep bloop, I'm a bot and under development!"
+    header = "The multireddit \"{}\" contains {} subs:\n\n".format(subreddit_name, len(subreddit_list))
+    footer = "\n^^^Bleep ^^^bloop, ^^^I'm ^^^a ^^^bot ^^^and ^^^under ^^^development!"
 
-    fullstring += preface
+    fullstring += header
 
     for i in subreddit_list:
         description, over18 = get_subreddit_string(i)
@@ -104,7 +104,7 @@ def multireddit_string(subreddit_list, subreddit_name):
             substring = "- /r/{} - {}".format(i.display_name, description)
         fullstring += substring + "\n"
 
-    fullstring += end
+    fullstring += footer
 
     if VERBOSITY > 1:
         print(fullstring)
