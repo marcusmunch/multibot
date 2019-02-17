@@ -58,7 +58,7 @@ def get_subreddit_string(subreddit):
 
     Returns a tuple consisting of the title and True/False for NSFW status.
 
-    :param str subreddit: Name of the subreddit to get the title (and NSFW status) from.
+    :param praw.models.Subreddit subreddit: Name of the subreddit to get the title (and NSFW status) from.
     """
 
     with open("substrings.txt") as f:
