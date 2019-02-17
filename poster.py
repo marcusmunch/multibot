@@ -4,13 +4,9 @@
 This file is poster.py - the script which scans for new posts in /r/multihub and comments with a list of subreddits
 contained within a multireddit.
 
-Currently the file works with only (mainly) one function, main(). I could have made do_the_thing(), but since main()
-already did what I wanted it to do, I decided on sticking with the current model.
-
-Example:
-    Be aware that running poster.py with no parameters starts scanning /r/multihub for posts. It is highly(!) recommended
-    that users test this script in debug mode (-d) and get familiar with it, since running it with no options will start
-    posting comments.
+Be aware that running poster.py with no parameters starts scanning /r/multihub for posts. It is highly(!) recommended
+that users test this script in debug mode (-d) and get familiar with it, since running it with no options will start
+posting comments.
 
 In the future, some things may (or may not) be added. These can be found in README.md, which you have hopefully also
 read by now.
@@ -45,9 +41,36 @@ def argparser():
     return args
 
 
+def do_the_thing(reddit, submission, debug=False):
+    """Parse the linked submission and comment (unless debug mode is enabled). Returns False if post handling somehow
+    failed underway, stderr should provide info needed for diagnostics."""
+
+    try:
+        multisub_tuple = multibot.get_multisub_tuple(submission.url)
+
+        # Get the list of subreddits
+        sub_list = multibot.get_multisub_subreddits(reddit, multisub_tuple)
+    except AttributeError:  # Typically posts not being proper multireddits
+        return False
+
+    # Compose the comment
+    try:
+        comment = multibot.multireddit_string(sub_list, multisub_tuple[1])
+    except prawcore.exceptions.NotFound:
+        print(submission.permalink)
+        return False
+
+    # Post the comment
+    if not debug:
+        submission.reply(comment)
+        print("\n\nPosted reply to {}: {} - now sleeping...".format(submission.author, submission.title))
+        sleep(600)
+    else:
+        print("POST THE REPLY BLEEP BLOOP")
+
+
 def main(praw_sect="mhb"):
     """
-
     Args:
         praw_sect: The section (specified in praw.ini) to authenticate with.
     """
@@ -76,30 +99,7 @@ def main(praw_sect="mhb"):
             else:
                 continue
 
-        # Parse the multireddit link to a user-multi tuple
-        try:
-            multisub_tuple = multibot.get_multisub_tuple(submission.url)
-        except AttributeError:  # Typically posts not being proper multireddits
-            continue
-
-        try:
-            # Get the list of subs contained in the multireddit
-            subs = multibot.get_multisub_subreddits(reddit, multisub_tuple)
-
-            # Compose the comment
-            reply_text = multibot.multireddit_string(subs, subreddit_name=multisub_tuple[1]) + "\n" + "-"*40
-
-        except prawcore.exceptions.NotFound:
-            continue
-
-        # Post the comment
-        if not args.d:
-            submission.reply(reply_text)
-            print("\n\nPosted reply to {}: {} - now sleeping...".format(submission.author, submission.title))
-            sleep(600)
-        else:
-            print("POST THE REPLY BLEEP BLOOP")
-
+        do_the_thing(reddit, submission, debug=args.d)
 
 
 if __name__ == "__main__":
