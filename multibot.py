@@ -28,16 +28,19 @@ def authenticate(username):
     return reddit
 
 
-def get_multisub_tuple(reddit_url):
-    """Parses a reddit_url into a (user, multireddit) tuple to return.
+def get_multisub_tuple(multireddit_url):
+    """Parses a multireddit_url into a (user, multireddit) tuple to return.
 
     Note: Raises an AttributeError if URL doesn't fit the format given by sublink_pattern
 
-    :param str reddit_url: The URL for a multireddit.
+    :param str multireddit_url: The URL for a multireddit.
     """
-
-    sublink_pattern = "[A-Za-z0-9\-\_]*\/m\/[A-Za-z0-9\-\_]*"
-    return re.search(sublink_pattern, reddit_url).group(0).split("/m/")
+    try:
+        sublink_pattern = "[A-Za-z0-9\-\_]*\/m\/[A-Za-z0-9\-\_]*"
+        return re.search(sublink_pattern, multireddit_url).group(0).split("/m/")
+    except AttributeError:
+        sys.stderr.write("URL doesn't match multireddit pattern: {}\n".format(multireddit_url))
+        raise
 
 
 def get_multisub_subreddits(reddit, multisub_tuple):
