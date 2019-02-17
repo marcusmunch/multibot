@@ -76,6 +76,11 @@ def get_subreddit_string(subreddit):
             with open("substrings.txt", "w") as f:
                 json.dump(strings, f, indent=2, sort_keys=True)
 
+        except prawcore.exceptions.NotFound:  # Subreddit is banned
+            strings.update({subreddit.display_name: ("BANNED", False)})
+            with open("substrings.txt", "w") as f:
+                json.dump(strings, f, indent=2, sort_keys=True)
+
     return strings[subreddit.display_name]
 
 
@@ -88,6 +93,10 @@ def multireddit_string(subreddit_list, subreddit_name):
 
     for i in subreddit_list:
         description, over18 = get_subreddit_string(i)
+
+        if description == "BANNED":
+            print("{} is banned!".format(i.display_name))
+            continue
 
         if over18:
             substring = "- /r/{} (NSFW) - {}".format(i.display_name, description)
