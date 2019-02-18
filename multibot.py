@@ -96,7 +96,7 @@ def multireddit_string(subreddit_list, subreddit_name):
 
     fullstring += header
 
-    for i in subreddit_list:
+    for i in sorted(subreddit_list, key=lambda s: s.display_name.casefold()):
         description, over18 = get_subreddit_string(i)
 
         if description == "BANNED":
