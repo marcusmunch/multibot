@@ -52,6 +52,8 @@ def do_the_thing(reddit, submission, debug=False):
         sub_list = multibot.get_multisub_subreddits(reddit, multisub_tuple)
     except AttributeError:  # Typically posts not being proper multireddits
         return False
+    except prawcore.exceptions.NotFound:  # User deleted account (and/or sub?)
+        return False
 
     # Compose the comment
     try:
