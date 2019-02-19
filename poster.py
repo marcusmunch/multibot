@@ -45,6 +45,19 @@ def do_the_thing(reddit, submission, debug=False):
     """Parse the linked submission and comment (unless debug mode is enabled). Returns False if post handling somehow
     failed underway, stderr should provide info needed for diagnostics."""
 
+    if submission.is_self:  # Skip self posts
+        return False
+
+    comment_authors = [c.author for c in submission.comments]
+
+    if reddit.user.me() in comment_authors:
+        if multibot.VERBOSITY > 0:
+            sys.stderr.write("Already commented on: {} - skipping!\n".format(submission.title))
+        if debug:
+            pass  # Prevent wait for new posts when in debug mode
+        else:
+            return False
+
     try:
         multisub_tuple = multibot.get_multisub_tuple(submission.url)
 
@@ -78,7 +91,6 @@ def main(praw_sect="mhb"):
     """
 
     reddit = multibot.authenticate(praw_sect)
-    my_name = reddit.user.me()
     subreddit = reddit.subreddit("multihub")
     args = argparser()
 
@@ -87,20 +99,6 @@ def main(praw_sect="mhb"):
         print("Verbosity is set to {}!".format(multibot.VERBOSITY))
 
     for submission in subreddit.stream.submissions(skip_existing=False):
-        if submission.is_self:  # Skip self posts
-            continue
-
-        # Look for self in users who commented in the thread
-        comment_authors = [c.author for c in submission.comments]
-
-        if my_name in comment_authors:  # Skip already commented posts
-            if multibot.VERBOSITY > 0:
-                sys.stderr.write("Already commented on: {} - skipping!\n".format(submission.title))
-            if args.d:
-                pass  # Prevent wait for new posts when in debug mode
-            else:
-                continue
-
         do_the_thing(reddit, submission, debug=args.d)
 
 
