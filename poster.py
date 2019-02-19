@@ -79,7 +79,11 @@ def do_the_thing(reddit, submission, debug=False):
     if not debug:
         submission.reply(comment)
         print("\n\nPosted reply to {}: {} - now sleeping...".format(submission.author, submission.title))
-        sleep(600)
+        try:
+            sleep(600)
+        except KeyboardInterrupt:
+            sys.stderr.write("User interrupted!\n")
+            exit(0)
     else:
         print("POST THE REPLY BLEEP BLOOP")
 
