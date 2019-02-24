@@ -25,6 +25,7 @@ import sys
 from time import sleep
 from argparse import ArgumentParser
 
+import praw
 import prawcore
 
 import multibot
@@ -83,10 +84,23 @@ def do_the_thing(reddit, submission, debug=False):
 
     # Post the comment
     if not debug:
-        submission.reply(comment)
-        print("\n\nPosted reply to {}: {} - now sleeping...".format(submission.author, submission.title))
+        while True:
+            try:
+                submission.reply(comment)
+                print("\n\nPosted reply to {}: {}".format(submission.author, submission.title))
+            except praw.exceptions.APIException as e:
+                if e.error_type == "RATELIMIT":
+                    sys.stderr.write("Hit the rate limit. Error: {}\nWaiting 10 minutes".format(e.message))
+                    try:
+                        sleep(600)
+                        continue
+                    except KeyboardInterrupt:
+                        sys.stderr.write("User interrupted sleep!")
+                        continue
+            else:
+                break
         try:
-            sleep(600)
+            pass
         except KeyboardInterrupt:
             sys.stderr.write("User interrupted!\n")
             exit(0)
