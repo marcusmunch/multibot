@@ -36,7 +36,7 @@ def get_multisub_tuple(multireddit_url):
     :param str multireddit_url: The URL for a multireddit.
     """
     try:
-        sublink_pattern = "[A-Za-z0-9\-\_]*\/m\/[A-Za-z0-9\-\_]*"
+        sublink_pattern = "[A-Za-z0-9\-\_]+\/m\/[A-Za-z0-9\-\_]+"
         return re.search(sublink_pattern, multireddit_url).group(0).split("/m/")
     except AttributeError:
         sys.stderr.write("URL doesn't match multireddit pattern: {}\n".format(multireddit_url))
