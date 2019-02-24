@@ -75,6 +75,10 @@ def do_the_thing(reddit, submission, debug=False):
         sys.stderr.write("An error occurred while handling submission ID {}: {}\n".format(submission, e))
         raise
 
+    if not sub_list:
+        sys.stderr.write("Multireddit /m/{1} by /u/{0} is empty!".format(*multisub_tuple))
+        return False
+
     # Compose the comment
     try:
         comment = multibot.multireddit_string(sub_list, multisub_tuple[1])
