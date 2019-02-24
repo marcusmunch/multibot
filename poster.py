@@ -47,6 +47,9 @@ def do_the_thing(reddit, submission, debug=False):
 
     if submission.is_self:  # Skip self posts
         return False
+    if not submission.author:
+        sys.stderr.write("Skipping deleted post\n")
+        return False
 
     comment_authors = [c.author for c in submission.comments]
 
