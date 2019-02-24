@@ -70,6 +70,9 @@ def do_the_thing(reddit, submission, debug=False):
         return False
     except prawcore.exceptions.NotFound:  # User deleted account (and/or sub?)
         return False
+    except Exception as e:
+        sys.stderr.write("An error occurred while handling submission ID {}: {}\n".format(submission, e))
+        raise
 
     # Compose the comment
     try:
