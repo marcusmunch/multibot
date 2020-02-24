@@ -1,3 +1,5 @@
+## NOTE! MultiBot was written as there was no way to view subreddits in a custom user feed on some mobile apps (including the official iOS app). However, as the feature has since been implemented, MultiBot is obsolete as of February 2020 (and will likely be forever).
+
 # MultiBot ![](https://img.shields.io/github/release/marcusmunch/multibot.svg)
 
 `multibot` is a Reddit bot that interacts with [/r/MultiHub](https://reddit.com/r/multihub) in various ways (currently only one though).
